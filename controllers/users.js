@@ -48,7 +48,13 @@ const createUser = (req, res) => {
 // Обновить профиль.
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+    .then((user) => res.send({
+      _id: user._id,
+      avatar: user.avatar,
+      name,
+      about,
+    }))
     .then((user) => res.status(200).send({ data: user }))
     .catch(() => res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' }));
 };
