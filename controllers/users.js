@@ -49,12 +49,15 @@ const createUser = (req, res) => {
 const updateProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.status(200).send({
-      _id: user._id,
-      avatar: user.avatar,
-      name,
-      about,
-    }))
+    .then((user) => {
+      res.status(200);
+      res.send({
+        _id: user._id,
+        avatar: user.avatar,
+        name,
+        about,
+      });
+    })
     .catch(() => res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' }));
 };
 
