@@ -14,8 +14,8 @@ const getUsers = (req, res) => {
 // Вернуть пользователя по _id.
 const getUser = (req, res) => {
   User.findById(req.params.id)
-    .then(user => res.send({ data: user }))
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+    .then((user) => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 // Создать пользователя
@@ -42,9 +42,9 @@ const updateProfile = (req, res) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   )
-    .then(user => res.send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({

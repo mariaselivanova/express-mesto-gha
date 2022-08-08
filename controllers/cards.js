@@ -25,8 +25,8 @@ const createCard = (req, res) => {
 // Удалить карточку.
 const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
-    .then(card => res.send({ data: card }))
-    .catch(err => res.status(404).send({ message: 'Карточка с указанным _id не найдена.' }));
+    .then((card) => res.send({ data: card }))
+    .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена.' }));
 };
 
 // Поставить лайк карточке.
