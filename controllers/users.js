@@ -54,11 +54,11 @@ const updateProfile = (req, res) => {
         res.status(400).send({ message: 'sdsdsdsd' });
         return;
       }
-      res.send({ data: updUser });
+      res.status(200).send({ data: updUser });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(404).send({ message: 'dfdfdfdf' });
+        res.status(400).send({ message: 'dfdfdfdf' });
         return;
       }
       res.status(500).send({ message: 'Ошибка упс' });

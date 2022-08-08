@@ -12,15 +12,8 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
   const { _id } = req.user;
 
-  Card.create({ name, link, owner: _id })
-    .then((card) => res.status(200).send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные' });
-      } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    });
+  return Card.create({ name, link, owner: _id })
+    .then((card) => res.status(200).send(card))
 };
 
 // Удалить карточку.

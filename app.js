@@ -6,19 +6,24 @@ const app = express();
 
 const mongoose = require('mongoose');
 
+const bodyParser = require('body-parser');
+
 const routerUser = require('./routes/users');
 
 const routerCard = require('./routes/cards');
 
+
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
-});
+})
 
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '662f15900ac298b2be1689a03',
+    _id: '62f1818a789e8cb6d51d4dbe',
   };
 
   next();
