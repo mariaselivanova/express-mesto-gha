@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '62f140af584915f737c2b932',
+    _id: '662f15900ac298b2be1689a03',
   };
 
   next();
@@ -26,6 +26,10 @@ app.use((req, res, next) => {
 
 app.use('/', routerUser);
 app.use('/', routerCard);
+
+app.all('*', (req, res) => {
+  res.status(404).send({ message: 'Страница с таким url не найдена' });
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

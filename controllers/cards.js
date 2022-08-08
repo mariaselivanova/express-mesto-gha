@@ -10,14 +10,15 @@ const getCards = (req, res) => {
 // Создать карточку.
 const createCard = (req, res) => {
   const { name, link } = req.body;
-  const cardOwner = req.user._id;
-  return Card.create({ name, link, cardOwner })
+  const owner = req.user._id;
+
+  return Card.create({ name, link, owner })
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя.' });
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка.' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -39,7 +40,7 @@ const likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         return res.status(404).send({
-          message: 'Передан несуществующий _id карточки.',
+          message: 'Переданы некорректные данные для добавления лайка',
         });
       }
       return res.send(card);
@@ -47,10 +48,10 @@ const likeCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(400).send({
-          message: 'Переданы некорректные данные для постановки лайка',
+          message: 'Некорректный id карточки',
         });
       }
-      return res.status(500).send({ message: 'Произошла ошибка' });
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -65,17 +66,17 @@ const deleteLike = (req, res) => {
       if (!card) {
         return res
           .status(404)
-          .send({ message: 'Передан несуществующий _id карточки.' });
+          .send({ message: 'Карточка для удаления лайка не найдена' });
       }
       return res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(400).send({
-          message: 'Переданы некорректные данные для снятия лайка.',
+          message: 'Некорректный id карточки',
         });
       }
-      return res.status(500).send({ message: 'Произошла ошибка' });
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
