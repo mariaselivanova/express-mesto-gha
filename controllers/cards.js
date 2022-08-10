@@ -28,12 +28,16 @@ const deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(400).send({ message: 'Карточка с указанным id не найдена.' });
+        res.status(404).send({ message: 'Карточка с указанным id не найдена.' });
         return;
       }
       res.send({ message: `Карточка '${card.name}' успешно удалена` });
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Указан некорректный id' });
+        return;
+      }
       res.status(500).send({ message: 'Произошла ошибка.' });
     });
 };
