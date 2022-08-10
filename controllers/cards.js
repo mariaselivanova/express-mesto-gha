@@ -25,9 +25,17 @@ const createCard = (req, res) => {
 
 // Удалить карточку.
 const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.id)
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена.' }));
+  Card.findByIdAndDelete(req.params.cardId)
+    .then((card) => {
+      if (!card) {
+        res.status(400).send({ message: 'Карточка с указанным id не найдена.' });
+        return;
+      }
+      res.send({ message: `Карточка '${card.name}' успешно удалена` });
+    })
+    .catch(() => {
+      res.status(500).send({ message: 'Произошла ошибка.' });
+    });
 };
 
 // Поставить лайк карточке.
