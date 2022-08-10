@@ -12,10 +12,9 @@ const routerUser = require('./routes/users');
 
 const routerCard = require('./routes/cards');
 
-
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
-})
+});
 
 app.use(express.json());
 app.use(bodyParser.json());
