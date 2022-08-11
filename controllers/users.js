@@ -5,7 +5,7 @@ const errorStatus = require('../utils/errorStatus');
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(200).send(users);
+      res.send(users);
     })
     .catch(() => {
       res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
@@ -19,7 +19,7 @@ const getUser = (req, res) => {
       if (!user) {
         return res.status(errorStatus.NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -34,7 +34,7 @@ const getUser = (req, res) => {
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(errorStatus.BAD_REQUEST).send({ message: 'Некорректные данные пользователя' });
@@ -53,7 +53,7 @@ const updateProfile = (req, res) => {
         res.status(errorStatus.NOT_FOUND).send({ message: 'Пользователь не найден' });
         return;
       }
-      res.status(200).send({ data: newUser });
+      res.send({ data: newUser });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

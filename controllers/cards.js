@@ -4,7 +4,7 @@ const errorStatus = require('../utils/errorStatus');
 // Получить все карточки.
 const getCards = (req, res) => {
   Card.find({})
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.send(cards))
     .catch(() => res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' }));
 };
 
@@ -13,7 +13,7 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
   const { _id } = req.user;
   Card.create({ name, link, owner: _id })
-    .then((card) => res.status(200).send({ data: card }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
@@ -31,7 +31,7 @@ const deleteCard = (req, res) => {
         res.status(errorStatus.NOT_FOUND).send({ message: 'Карточка не найдена' });
         return;
       }
-      res.status(200).send(card);
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {

@@ -30,8 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', routerUser);
-app.use('/', routerCard);
+app.use('/users', routerUser);
+app.use('/cards', routerCard);
 
 app.all('*', (req, res) => {
   res.status(errorStatus.NOT_FOUND).send({ message: 'Страница с таким url не найдена' });
