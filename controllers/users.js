@@ -30,16 +30,14 @@ const getUser = (req, res) => {
     });
 };
 
-// Создать пользователя
+// Создать пользователя.
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(errorStatus.BAD_REQUEST).send({
-          message: 'Переданы некорректные данные при создании пользователя',
-        });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
@@ -60,16 +58,11 @@ const updateProfile = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+      } else {
+        res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
-      res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
 };
-
-// _id: user._id,
-// avatar,
-// name: user.name,
-// about: user.about,
 
 // Обновить аватар.
 const updateAvatar = (req, res) => {
@@ -78,9 +71,7 @@ const updateAvatar = (req, res) => {
     .then((newUser) => res.status(200).send({ data: newUser }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(errorStatus.BAD_REQUEST).send({
-          message: 'Переданы некорректные данные при обновлении аватара',
-        });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении аватара' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
