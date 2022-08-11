@@ -16,7 +16,7 @@ const createCard = (req, res) => {
     .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании карточки' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
@@ -35,7 +35,7 @@ const deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Указан некорректный id карточки' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
@@ -44,11 +44,7 @@ const deleteCard = (req, res) => {
 
 // Поставить лайк.
 const likeCard = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true },
-  )
+  Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .then((card) => {
       if (!card) {
         return res.status(errorStatus.NOT_FOUND).send({ message: 'Карточка не найдена' });
@@ -57,7 +53,7 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Указан некорректный id карточки' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
@@ -66,11 +62,7 @@ const likeCard = (req, res) => {
 
 // Убрать лайк с карточки.
 const deleteLike = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    { new: true },
-  )
+  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .then((card) => {
       if (!card) {
         return res.status(errorStatus.NOT_FOUND).send({ message: 'Карточка не найдена' });
@@ -79,7 +71,7 @@ const deleteLike = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Указан некорректный id карточки' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(errorStatus.BAD_REQUEST).send({ message: 'На сервере произошла ошибка' });
       }

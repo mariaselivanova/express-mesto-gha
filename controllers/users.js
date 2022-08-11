@@ -23,7 +23,7 @@ const getUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Некорректный id пользователя' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Некорректные данные пользователя' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
@@ -37,7 +37,7 @@ const createUser = (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные при создании пользователя' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
@@ -71,7 +71,7 @@ const updateAvatar = (req, res) => {
     .then((newUser) => res.status(200).send({ data: newUser }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении аватара' });
+        res.status(errorStatus.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(errorStatus.SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
       }
