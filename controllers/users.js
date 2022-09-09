@@ -8,7 +8,7 @@ const EmailExists = require('../errors/email-exists-err');
 const AuthError = require('../errors/auth-err');
 
 // Логин.
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -20,7 +20,7 @@ const login = (req, res) => {
 };
 
 // Вернуть всех пользоваетелей.
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.send(users);
@@ -29,7 +29,7 @@ const getUsers = (req, res) => {
 };
 
 // Вернуть пользователя по _id.
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
@@ -46,7 +46,7 @@ const getUser = (req, res) => {
 };
 
 // Создать пользователя.
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
       name: req.body.name,
@@ -68,7 +68,7 @@ const createUser = (req, res) => {
 };
 
 // Обновить профиль.
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((newUser) => {
@@ -86,7 +86,7 @@ const updateProfile = (req, res) => {
 };
 
 // Обновить аватар.
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((newUser) => res.status(200).send({ data: newUser }))
@@ -99,7 +99,7 @@ const updateAvatar = (req, res) => {
 };
 
 // Получение информации о пользователе.
-const getUserInfo = (req, res) => {
+const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {

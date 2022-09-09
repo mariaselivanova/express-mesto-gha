@@ -16,7 +16,7 @@ const { login, createUser } = require('./controllers/users');
 
 const auth = require('./middlewares/auth');
 
-const errorStatus = require('./utils/errorStatus');
+const NotFoundError = require('./errors/not-found-err');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -32,7 +32,7 @@ app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
 app.all('*', (req, res) => {
-  res.status(errorStatus.NOT_FOUND).send({ message: 'Страница с таким url не найдена' });
+  next(new NotFoundError('Страница с таким url не найдена'));
 });
 
 app.use((err, req, res, next) => {

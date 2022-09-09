@@ -5,14 +5,14 @@ const BadRequest = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
 // Получить все карточки.
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send(cards))
     .catch(next);
 };
 
 // Создать карточку.
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
@@ -26,7 +26,7 @@ const createCard = (req, res) => {
 };
 
 // Удалить карточку.
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
@@ -51,7 +51,7 @@ const deleteCard = (req, res) => {
 };
 
 // Поставить лайк.
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
     .then((card) => {
       if (!card) {
@@ -68,7 +68,7 @@ const likeCard = (req, res) => {
 };
 
 // Убрать лайк с карточки.
-const deleteLike = (req, res) => {
+const deleteLike = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .then((card) => {
       if (!card) {
