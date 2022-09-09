@@ -25,7 +25,7 @@ const getUsers = (req, res, next) => {
     .then((users) => {
       res.send(users);
     })
-    .catch(next)
+    .catch(next);
 };
 
 // Вернуть пользователя по _id.
@@ -75,7 +75,7 @@ const updateProfile = (req, res, next) => {
       if (!newUser) {
         return next(new NotFound('Пользователь не найден'));
       }
-      res.send({ data: newUser });
+      return res.send({ data: newUser });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

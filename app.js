@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 
+const { errors } = require('celebrate');
+
 const routerUser = require('./routes/users');
 
 const routerCard = require('./routes/cards');
@@ -31,9 +33,11 @@ app.use(auth);
 app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
-app.all('*', (req, res) => {
+app.all('*', (req, res, next) => {
   next(new NotFoundError('Страница с таким url не найдена'));
 });
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
