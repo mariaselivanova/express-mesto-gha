@@ -28,22 +28,16 @@ const getUsers = (req, res, next) => {
     .catch(next);
 };
 
-// Вернуть пользователя по _id.
+// Вернуть пользователя.
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
-      if (user === null) {
-        throw new NotFoundE('Пользователь не найден');
+      if (!user) {
+        return next(new NotFound('Пользователь не найден'));
       }
-      res.send({ data: user });
+      return res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Неверные данные'));
-        return;
-      }
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 // Создать пользователя.
