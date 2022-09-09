@@ -18,6 +18,11 @@ const { login, createUser } = require('./controllers/users');
 
 const auth = require('./middlewares/auth');
 
+const {
+  validateLogin,
+  validateUser,
+} = require('./middlewares/validation');
+
 const NotFoundError = require('./errors/not-found-err');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -27,8 +32,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', validateLogin, login);
+app.post('/signup', validateUser, createUser);
 app.use(auth);
 app.use('/users', routerUser);
 app.use('/cards', routerCard);

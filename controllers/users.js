@@ -108,7 +108,7 @@ const getUserInfo = (req, res, next) => {
       return res.send(user);
     })
     .catch((err) => next(err));
-}
+};
 
 module.exports = {
   login,
