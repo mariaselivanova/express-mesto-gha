@@ -105,7 +105,7 @@ const getUserInfo = (req, res, next) => {
       if (!user) {
         return next(new NotFound('Пользователь не найден'));
       }
-      return res.send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => next(err));
 };
