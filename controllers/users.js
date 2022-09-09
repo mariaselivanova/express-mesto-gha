@@ -30,18 +30,19 @@ const getUsers = (req, res, next) => {
 
 // Вернуть пользователя по _id.
 const getUser = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
     .then((user) => {
-      if (!user) {
-        return next(new NotFound('Пользователь не найден'));
+      if (user === null) {
+        throw new NotFoundE('Пользователь не найден');
       }
-      return res.send(user);
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequest('Некорректный id пользователя'));
+        next(new BadRequest('Неверные данные'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -99,23 +100,29 @@ const updateAvatar = (req, res, next) => {
 };
 
 // Получение информации о пользователе.
-const getUserInfo = (req, res, next) => {
-  User.findById(req.user._id)
+const getUserById = (req, res, next) => {
+  User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return next(new NotFound('Пользователь не найден'));
+        throw new NotFound('Пользователь не найден');
       }
-      return res.status(200).send(user);
+      res.send({ data: user });
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequest('Неверные данные'));
+        return;
+      }
+      next(err);
+    });
 };
 
 module.exports = {
   login,
   getUsers,
   createUser,
-  getUserInfo,
   getUser,
   updateAvatar,
   updateProfile,
+  getUserById,
 };
