@@ -50,7 +50,14 @@ const createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
     }))
-    .then((user) => res.send(user))
+    .then((user) => {
+      res.status(201).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        email: user.email,
+      });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequest('Переданы некорректные данные при создании пользователя'));
@@ -93,7 +100,7 @@ const updateAvatar = (req, res, next) => {
     });
 };
 
-// Получение информации о пользователе.
+// Найти пользователя по ID.
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
