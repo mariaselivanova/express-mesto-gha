@@ -5,6 +5,7 @@ const User = require('../models/user');
 const NotFound = require('../errors/not-found-err');
 const BadRequest = require('../errors/bad-request-err');
 const EmailExists = require('../errors/email-exists-err');
+const AuthError = require('../errors/auth-err');
 
 // Логин.
 const login = (req, res, next) => {
@@ -15,7 +16,7 @@ const login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch(next);
+    .catch(() => next(new AuthError('Неверные почта или пароль')));
 };
 
 // Вернуть всех пользоваетелей.
