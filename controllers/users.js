@@ -60,7 +60,7 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequest('Переданы некорректные данные при создании пользователя'));
+        return next(new BadRequest('Переданы некорректные данные'));
       }
       if (err.code === 11000) {
         return next(new EmailExists(`Пользователь с таким email ${req.body.email} уже существует`));
