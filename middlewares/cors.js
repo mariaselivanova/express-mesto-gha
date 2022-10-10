@@ -1,5 +1,5 @@
-/* eslint-disable linebreak-style */
-const allowedCors = [
+ /* eslint-disable linebreak-style */
+/* const allowedCors = [
   'https://mestoproject.nomoredomains.icu',
   'http://mestoproject.nomoredomains.icu',
   'https://api.mestoproject.nomoredomains.icu',
@@ -27,4 +27,5 @@ const cors = (req, res, next) => {
   return next();
 };
 
-module.exports = cors;
+module.exports = cors; */
+ */
