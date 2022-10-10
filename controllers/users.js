@@ -25,7 +25,7 @@ const login = (req, res, next) => {
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.send({ data: users });
+      res.send(users);
     })
     .catch(next);
 };
@@ -81,7 +81,7 @@ const updateProfile = (req, res, next) => {
       if (!newUser) {
         throw new NotFound('Пользователь не найден');
       }
-      res.send({ data: newUser });
+      res.send(newUser);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -96,7 +96,7 @@ const updateProfile = (req, res, next) => {
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .then((newUser) => res.status(200).send({ data: newUser }))
+    .then((newUser) => res.status(200).send(newUser))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные'));
@@ -113,7 +113,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFound('Пользователь не найден');
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
