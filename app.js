@@ -15,9 +15,16 @@ const {
   loginValidation,
   userValidation,
 } = require('./middlewares/validation');
-const allowedCors = [
-
-]
+const options = {
+  origin: [
+    'http://localhost:3000',
+    'http://mestoproject.nomoredomains.icu',
+    'https://mestoproject.nomoredomains.icu',
+    'http://api.mestoproject.nomoredomains.icu',
+    'https://api.mestoproject.nomoredomains.icu',
+  ],
+  credentials: true, // эта опция позволяет устанавливать куки
+};
 
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -27,22 +34,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(express.json());
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  const { method } = req;
-  const requestHeaders = req.headers['access-control-request-headers'];
-
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    return res.end();
-  }
-
-  next();
-};
+app.use('*', cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
