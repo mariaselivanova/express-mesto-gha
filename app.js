@@ -25,7 +25,21 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://mestoproject.nomoredomains.icu',
+    'http://mestoproject.nomoredomains.icu',
+    'https://api.mestoproject.nomoredomains.icu',
+    'http://api.mestoproject.nomoredomains.icu',
+    'https://www.api.mestoproject.nomoredomains.icu',
+    'http://www.api.mestoproject.nomoredomains.icu',
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://localhost:3001',
+    'https://localhost:3001',
+  ],
+  credentials: true,
+}));
 app.post('/signin', loginValidation, login);
 app.post('/signup', userValidation, createUser);
 app.use(auth);
