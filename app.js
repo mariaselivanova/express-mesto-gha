@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const { PORT = 3000 } = process.env;
 const app = express();
-const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
@@ -15,17 +14,13 @@ const {
   loginValidation,
   userValidation,
 } = require('./middlewares/validation');
-const options = {
-  origin: [
-    'http://localhost:3000',
-    'http://mestoproject.nomoredomains.icu',
-    'https://mestoproject.nomoredomains.icu',
-    'http://api.mestoproject.nomoredomains.icu',
-    'https://api.mestoproject.nomoredomains.icu',
-  ],
-  optionsSuccessStatus: 200,
-  credentials: true, // эта опция позволяет устанавливать куки
-};
+const allowedCors = [
+  'http://localhost:3000',
+  'http://mestoproject.nomoredomains.icu',
+  'https://mestoproject.nomoredomains.icu',
+  'http://api.mestoproject.nomoredomains.icu',
+  'https://api.mestoproject.nomoredomains.icu',
+];
 
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -35,7 +30,26 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(express.json());
-app.use('*', cors(options));
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  const { method } = req;
+  const requestHeaders = req.headers['access-control-request-headers'];
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  console.log(origin);
+
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+  }
+
+  if (allowedCors.includes(origin)) {
+    console.log('hehehe');
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', true);
+    return res.end();
+  }
+  return next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
