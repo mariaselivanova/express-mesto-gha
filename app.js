@@ -37,20 +37,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(requestLogger);
-app.post('/signin', loginValidation, login);
-app.post('/signup', userValidation, createUser);
-app.use(auth);
-app.use('/users', routerUser);
-app.use('/cards', routerCard);
-
-app.all('*', (req, res, next) => {
-  next(new NotFoundError('Страница с таким url не найдена'));
-});
-app.use(errorLogger);
-app.use(errors());
-
 app.use((req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
@@ -68,6 +54,19 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(requestLogger);
+app.post('/signin', loginValidation, login);
+app.post('/signup', userValidation, createUser);
+app.use(auth);
+app.use('/users', routerUser);
+app.use('/cards', routerCard);
+
+app.all('*', (req, res, next) => {
+  next(new NotFoundError('Страница с таким url не найдена'));
+});
+app.use(errorLogger);
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
