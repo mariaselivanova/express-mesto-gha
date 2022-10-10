@@ -6,7 +6,18 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
+const allowedCors = [
+  'https://mestoproject.nomoredomains.icu',
+  'http://mestoproject.nomoredomains.icu',
+  'https://api.mestoproject.nomoredomains.icu',
+  'http://api.mestoproject.nomoredomains.icu',
+  'https://www.api.mestoproject.nomoredomains.icu',
+  'http://www.api.mestoproject.nomoredomains.icu',
+  'http://localhost:3000',
+  'https://localhost:3000',
+  'http://localhost:3001',
+  'https://localhost:3001',
+];
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
@@ -26,21 +37,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({
-  origin: [
-    'https://mestoproject.nomoredomains.icu',
-    'http://mestoproject.nomoredomains.icu',
-    'https://api.mestoproject.nomoredomains.icu',
-    'http://api.mestoproject.nomoredomains.icu',
-    'https://www.api.mestoproject.nomoredomains.icu',
-    'http://www.api.mestoproject.nomoredomains.icu',
-    'http://localhost:3000',
-    'https://localhost:3000',
-    'http://localhost:3001',
-    'https://localhost:3001',
-  ],
-  credentials: true,
-}));
+
 app.use(requestLogger);
 app.post('/signin', loginValidation, login);
 app.post('/signup', userValidation, createUser);
@@ -53,6 +50,15 @@ app.all('*', (req, res, next) => {
 });
 app.use(errorLogger);
 app.use(errors());
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
+  // проверяем, что источник запроса есть среди разрешённых
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
