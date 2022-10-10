@@ -23,6 +23,7 @@ const options = {
     'http://api.mestoproject.nomoredomains.icu',
     'https://api.mestoproject.nomoredomains.icu',
   ],
+  optionsSuccessStatus: 200,
   credentials: true, // эта опция позволяет устанавливать куки
 };
 
