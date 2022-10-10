@@ -23,7 +23,7 @@ const cors = (req, res, next) => {
     res.header('Access-Control-Allow-Headers', requestHeaders);
     return res.end();
   }
-  res.header('Access-Control-Allow-Origin', '*');
+
   return next();
 };
 
