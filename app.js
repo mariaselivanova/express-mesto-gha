@@ -3,10 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const { PORT = 3000 } = process.env;
 const app = express();
-const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const cors = require('./middlewares/cors');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
@@ -16,30 +16,14 @@ const {
   userValidation,
 } = require('./middlewares/validation');
 
-const options = {
-  origin: {
-    origin: [
-      'http://localhost:3000',
-      'http://mestoproject.nomoredomains.icu',
-      'https://mestoproject.nomoredomains.icu',
-      'http://api.mestoproject.nomoredomains.icu',
-      'https://api.mestoproject.nomoredomains.icu',
-    ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-  },
-};
-
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
-
 app.use(express.json());
-app.use('*', cors(options));
+app.use(cors);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
