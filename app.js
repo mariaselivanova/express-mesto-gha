@@ -36,6 +36,7 @@ app.use(cors({
     'https://localhost:3001',
   ],
   credentials: true,
+  optionsSuccessStatus: 200,
 }));
 
 app.use(express.json());
