@@ -1,13 +1,13 @@
 /* eslint-disable import/newline-after-import */
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { PORT = 3000 } = process.env;
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const cors = require('./middlewares/cors');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
@@ -24,7 +24,21 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 app.use(express.json());
-app.use(cors);
+app.use(cors({
+  origin: [
+    'https://mestoproject.nomoredomains.icu',
+    'http://mestoproject.nomoredomains.icu',
+    'https://api.mestoproject.nomoredomains.icu',
+    'http://api.mestoproject.nomoredomains.icu',
+    'https://www.api.mestoproject.nomoredomains.icu',
+    'http://www.api.mestoproject.nomoredomains.icu',
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://localhost:3001',
+    'https://localhost:3001',
+  ],
+  credentials: true,
+}));
 app.use(cookieParser);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
