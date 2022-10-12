@@ -11,9 +11,9 @@ const AuthError = require('../errors/auth-err');
 
 // Логин.
 const login = (req, res, next) => {
-  const { email, password } = req.body;
+  const { password, email } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(password, email)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
